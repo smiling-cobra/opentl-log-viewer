@@ -1,6 +1,7 @@
 import type { IExportLogsServiceRequest } from "@opentelemetry/otlp-transformer/build/src/logs/internal-types";
 
-const API_URL = process.env.NEXT_PUBLIC_LOGS_API_URL;
+const API_URL =
+  "https://take-home-assignment-otlp-logs-api.vercel.app/api/logs";
 
 export const fetchLogs = async (): Promise<IExportLogsServiceRequest> => {
   if (!API_URL) {
