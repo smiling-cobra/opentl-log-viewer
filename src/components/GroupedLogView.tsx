@@ -1,5 +1,3 @@
-"use client";
-
 import { useMemo } from "react";
 import type { FlatLogRecord, ServiceGroup } from "@/lib/types";
 import { groupByService } from "@/lib/grouping";
@@ -79,7 +77,11 @@ const ServiceGroupPanel = ({
   );
 };
 
-export const GroupedLogView = ({ logs, expanded, onToggle }: GroupedLogViewProps) => {
+export const GroupedLogView = ({
+  logs,
+  expanded,
+  onToggle,
+}: GroupedLogViewProps) => {
   const groups = useMemo(() => groupByService(logs), [logs]);
 
   return (

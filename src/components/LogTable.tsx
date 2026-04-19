@@ -1,5 +1,3 @@
-"use client";
-
 import { Fragment } from "react";
 import type { FlatLogRecord } from "@/lib/types";
 
@@ -99,7 +97,9 @@ export const LogTable = ({
   onToggle: (id: string) => void;
 }) => {
   return (
-    <div className={`overflow-x-auto${bordered ? " rounded-lg border border-gray-200" : ""}`}>
+    <div
+      className={`overflow-x-auto${bordered ? " rounded-lg border border-gray-200" : ""}`}
+    >
       <table className="min-w-full divide-y divide-gray-200 text-sm">
         <thead className="bg-gray-50">
           <tr>

@@ -31,8 +31,6 @@ export const LogViewerContent = ({ logs }: { logs: FlatLogRecord[] }) => {
   const groupExpand = useExpandedSet();
   const activeExpand = view === "flat" ? rowExpand : groupExpand;
 
-  const filteredLogs = logs;
-
   return (
     <>
       <LogHistogram logs={logs} />
@@ -44,13 +42,13 @@ export const LogViewerContent = ({ logs }: { logs: FlatLogRecord[] }) => {
       />
       {view === "flat" ? (
         <LogTable
-          logs={filteredLogs}
+          logs={logs}
           expanded={rowExpand.expanded}
           onToggle={rowExpand.toggle}
         />
       ) : (
         <GroupedLogView
-          logs={filteredLogs}
+          logs={logs}
           expanded={groupExpand.expanded}
           onToggle={groupExpand.toggle}
         />

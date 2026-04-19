@@ -25,7 +25,7 @@ const Home = () => {
 
   return (
     <main className="w-full max-w-6xl mx-auto px-6 py-8">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
+      <h1 className="text-2xl font-semibold text-white-900 mb-6">
         OTLP Log Viewer
       </h1>
       <Suspense>

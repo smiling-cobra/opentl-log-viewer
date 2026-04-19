@@ -1,5 +1,3 @@
-"use client";
-
 export type ViewMode = "flat" | "grouped";
 
 const TOGGLE_BUTTON_BASE = "px-4 py-2 text-sm font-medium transition-colors";
