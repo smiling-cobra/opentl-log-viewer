@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useState } from "react";
+import { Fragment } from "react";
 import type { FlatLogRecord } from "@/lib/types";
 
 const SEVERITY_CLASSES: Record<string, string> = {
@@ -90,16 +90,14 @@ const LogRowDetail = ({ log }: { log: FlatLogRecord }) => {
 export const LogTable = ({
   logs,
   bordered = true,
+  expanded: expandedIds,
+  onToggle: toggleRow,
 }: {
   logs: FlatLogRecord[];
   bordered?: boolean;
+  expanded: Set<string>;
+  onToggle: (id: string) => void;
 }) => {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  const toggleRow = useCallback((id: string) => {
-    setExpandedId((prev) => (prev === id ? null : id));
-  }, []);
-
   return (
     <div className={`overflow-x-auto${bordered ? " rounded-lg border border-gray-200" : ""}`}>
       <table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -121,10 +119,10 @@ export const LogTable = ({
             <Fragment key={log.id}>
               <LogRow
                 log={log}
-                isExpanded={expandedId === log.id}
+                isExpanded={expandedIds.has(log.id)}
                 onToggle={() => toggleRow(log.id)}
               />
-              {expandedId === log.id && <LogRowDetail log={log} />}
+              {expandedIds.has(log.id) && <LogRowDetail log={log} />}
             </Fragment>
           ))}
         </tbody>

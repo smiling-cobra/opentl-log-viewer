@@ -1,9 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchLogs } from "@/lib/api";
 import { flattenLogs } from "@/lib/transform";
 import type { FlatLogRecord, UseLogsResult } from "@/lib/types";
+
+export const useExpandedSet = () => {
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const toggle = useCallback((id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }, []);
+
+  const collapseAll = useCallback(() => setExpanded(new Set()), []);
+
+  return { expanded, toggle, collapseAll };
+};
 
 export const useLogs = (): UseLogsResult => {
   const [logs, setLogs] = useState<FlatLogRecord[]>([]);

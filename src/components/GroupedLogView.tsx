@@ -1,9 +1,16 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { FlatLogRecord, ServiceGroup } from "@/lib/types";
 import { groupByService } from "@/lib/grouping";
+import { useExpandedSet } from "@/lib/hooks";
 import { LogTable } from "@/components/LogTable";
+
+interface GroupedLogViewProps {
+  logs: FlatLogRecord[];
+  expanded: Set<string>;
+  onToggle: (name: string) => void;
+}
 
 interface ServiceGroupPanelProps {
   group: ServiceGroup;
@@ -38,43 +45,41 @@ const ServiceGroupPanel = ({
   group,
   isExpanded,
   onToggle,
-}: ServiceGroupPanelProps) => (
-  <div className="rounded-lg border border-gray-200 mb-3 overflow-hidden">
-    <button
-      onClick={onToggle}
-      aria-expanded={isExpanded}
-      className="w-full px-4 py-3 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors text-left"
-    >
-      <div className="flex items-center gap-3">
-        <span className="text-sm font-semibold text-gray-900">
-          {group.serviceName}
-        </span>
-        <span className="text-xs text-gray-400">
-          {group.serviceNamespace} · {group.serviceVersion}
-        </span>
-        <LogCountBadge count={group.logs.length} />
-      </div>
-      <Chevron expanded={isExpanded} />
-    </button>
-    {isExpanded && (
-      <div className="border-t border-gray-200">
-        <LogTable logs={group.logs} bordered={false} />
-      </div>
-    )}
-  </div>
-);
+}: ServiceGroupPanelProps) => {
+  const { expanded: expandedRows, toggle: toggleRow } = useExpandedSet();
+  return (
+    <div className="rounded-lg border border-gray-200 mb-3 overflow-hidden">
+      <button
+        onClick={onToggle}
+        aria-expanded={isExpanded}
+        className="w-full px-4 py-3 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors text-left"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-semibold text-gray-900">
+            {group.serviceName}
+          </span>
+          <span className="text-xs text-gray-400">
+            {group.serviceNamespace} · {group.serviceVersion}
+          </span>
+          <LogCountBadge count={group.logs.length} />
+        </div>
+        <Chevron expanded={isExpanded} />
+      </button>
+      {isExpanded && (
+        <div className="border-t border-gray-200">
+          <LogTable
+            logs={group.logs}
+            bordered={false}
+            expanded={expandedRows}
+            onToggle={toggleRow}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
-export const GroupedLogView = ({ logs }: { logs: FlatLogRecord[] }) => {
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
-
-  const toggleGroup = useCallback((serviceName: string) => {
-    setExpandedGroups((prev) => {
-      const next = new Set(prev);
-      next.has(serviceName) ? next.delete(serviceName) : next.add(serviceName);
-      return next;
-    });
-  }, []);
-
+export const GroupedLogView = ({ logs, expanded, onToggle }: GroupedLogViewProps) => {
   const groups = useMemo(() => groupByService(logs), [logs]);
 
   return (
@@ -83,8 +88,8 @@ export const GroupedLogView = ({ logs }: { logs: FlatLogRecord[] }) => {
         <ServiceGroupPanel
           key={group.serviceName}
           group={group}
-          isExpanded={expandedGroups.has(group.serviceName)}
-          onToggle={() => toggleGroup(group.serviceName)}
+          isExpanded={expanded.has(group.serviceName)}
+          onToggle={() => onToggle(group.serviceName)}
         />
       ))}
     </div>

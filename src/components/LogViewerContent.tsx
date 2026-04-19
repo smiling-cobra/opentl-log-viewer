@@ -3,15 +3,12 @@
 import { useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { FlatLogRecord } from "@/lib/types";
+import { useExpandedSet } from "@/lib/hooks";
 import { LogHistogram } from "@/components/LogHistogram";
 import { LogTable } from "@/components/LogTable";
 import { GroupedLogView } from "@/components/GroupedLogView";
-
-type ViewMode = "flat" | "grouped";
-
-const TOGGLE_BUTTON_BASE = "px-4 py-2 text-sm font-medium transition-colors";
-const TOGGLE_BUTTON_ACTIVE = "bg-white text-gray-900 shadow-sm";
-const TOGGLE_BUTTON_INACTIVE = "bg-gray-50 text-gray-500 hover:text-gray-700";
+import { LogViewerToolbar } from "@/components/LogViewerToolbar";
+import type { ViewMode } from "@/components/LogViewerToolbar";
 
 export const LogViewerContent = ({ logs }: { logs: FlatLogRecord[] }) => {
   const router = useRouter();
@@ -30,29 +27,33 @@ export const LogViewerContent = ({ logs }: { logs: FlatLogRecord[] }) => {
     [router, pathname, searchParams],
   );
 
+  const rowExpand = useExpandedSet();
+  const groupExpand = useExpandedSet();
+  const activeExpand = view === "flat" ? rowExpand : groupExpand;
+
   const filteredLogs = logs;
 
   return (
     <>
       <LogHistogram logs={logs} />
-      <div className="flex rounded-lg border border-gray-200 overflow-hidden mb-6 w-fit">
-        <button
-          onClick={() => setView("flat")}
-          className={`${TOGGLE_BUTTON_BASE} ${view === "flat" ? TOGGLE_BUTTON_ACTIVE : TOGGLE_BUTTON_INACTIVE}`}
-        >
-          Flat
-        </button>
-        <button
-          onClick={() => setView("grouped")}
-          className={`${TOGGLE_BUTTON_BASE} border-l border-gray-200 ${view === "grouped" ? TOGGLE_BUTTON_ACTIVE : TOGGLE_BUTTON_INACTIVE}`}
-        >
-          Group by Service
-        </button>
-      </div>
+      <LogViewerToolbar
+        view={view}
+        onSetView={setView}
+        hasExpanded={activeExpand.expanded.size > 0}
+        onCollapseAll={activeExpand.collapseAll}
+      />
       {view === "flat" ? (
-        <LogTable logs={filteredLogs} />
+        <LogTable
+          logs={filteredLogs}
+          expanded={rowExpand.expanded}
+          onToggle={rowExpand.toggle}
+        />
       ) : (
-        <GroupedLogView logs={filteredLogs} />
+        <GroupedLogView
+          logs={filteredLogs}
+          expanded={groupExpand.expanded}
+          onToggle={groupExpand.toggle}
+        />
       )}
     </>
   );
