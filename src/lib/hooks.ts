@@ -1,15 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchLogs } from "./api";
-import { flattenLogs } from "./transform";
-import type { FlatLogRecord } from "./types";
-
-interface UseLogsResult {
-  logs: FlatLogRecord[];
-  loading: boolean;
-  error: string | null;
-}
+import { fetchLogs } from "@/lib/api";
+import { flattenLogs } from "@/lib/transform";
+import type { FlatLogRecord, UseLogsResult } from "@/lib/types";
 
 export const useLogs = (): UseLogsResult => {
   const [logs, setLogs] = useState<FlatLogRecord[]>([]);

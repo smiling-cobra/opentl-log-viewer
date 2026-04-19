@@ -9,3 +9,15 @@ export interface FlatLogRecord {
   serviceNamespace: string;
   serviceVersion: string;
 }
+
+export interface ServiceInfo {
+  serviceName: string;
+  serviceNamespace: string;
+  serviceVersion: string;
+}
+
+export interface UseLogsResult {
+  logs: FlatLogRecord[];
+  loading: boolean;
+  error: string | null;
+}
