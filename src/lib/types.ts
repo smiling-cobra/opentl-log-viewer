@@ -21,3 +21,8 @@ export interface UseLogsResult {
   loading: boolean;
   error: string | null;
 }
+
+export interface HistogramBucket {
+  date: string;  // YYYY-MM-DD
+  count: number;
+}

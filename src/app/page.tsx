@@ -1,6 +1,7 @@
 "use client";
 
 import { useLogs } from "@/lib/hooks";
+import { LogHistogram } from "@/components/LogHistogram";
 import { LogTable } from "@/components/LogTable";
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
   return (
     <main className="max-w-6xl mx-auto px-6 py-8">
       <h1 className="text-2xl font-semibold text-gray-900 mb-6">OTLP Log Viewer</h1>
+      <LogHistogram logs={logs} />
       <LogTable logs={logs} />
     </main>
   );
