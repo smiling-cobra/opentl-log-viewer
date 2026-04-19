@@ -10,7 +10,8 @@ export const toMs = (timeUnixNano: unknown): number => {
   return 0;
 };
 
-export const anyValueToString = (v: IAnyValue): string => JSON.stringify(v);
+export const anyValueToString = (value: IAnyValue): string =>
+  JSON.stringify(value);
 
 export const getAttr = (attrs: IKeyValue[], key: string): string => {
   const entry = attrs.find((a) => a.key === key);

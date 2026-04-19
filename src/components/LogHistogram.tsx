@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import type React from "react";
 import {
   Bar,
@@ -43,7 +44,7 @@ const formatCount = (value: unknown): [React.ReactNode, string] => [
 ];
 
 export const LogHistogram = ({ logs }: { logs: FlatLogRecord[] }) => {
-  const data = buildHistogram(logs);
+  const data = useMemo(() => buildHistogram(logs), [logs]);
 
   return (
     <div className="w-full rounded-lg border border-gray-200 bg-white px-4 pt-4 pb-2 mb-6">

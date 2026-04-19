@@ -1,10 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useLogs } from "@/lib/hooks";
-import { LogHistogram } from "@/components/LogHistogram";
-import { LogTable } from "@/components/LogTable";
+import { LogViewerContent } from "@/components/LogViewerContent";
 
-export default function Home() {
+const Home = () => {
   const { logs, loading, error } = useLogs();
 
   if (loading) {
@@ -24,10 +24,15 @@ export default function Home() {
   }
 
   return (
-    <main className="max-w-6xl mx-auto px-6 py-8">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">OTLP Log Viewer</h1>
-      <LogHistogram logs={logs} />
-      <LogTable logs={logs} />
+    <main className="w-full max-w-6xl mx-auto px-6 py-8">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
+        OTLP Log Viewer
+      </h1>
+      <Suspense>
+        <LogViewerContent logs={logs} />
+      </Suspense>
     </main>
   );
-}
+};
+
+export default Home;

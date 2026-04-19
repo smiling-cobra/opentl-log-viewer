@@ -87,7 +87,13 @@ const LogRowDetail = ({ log }: { log: FlatLogRecord }) => {
   );
 };
 
-export const LogTable = ({ logs }: { logs: FlatLogRecord[] }) => {
+export const LogTable = ({
+  logs,
+  bordered = true,
+}: {
+  logs: FlatLogRecord[];
+  bordered?: boolean;
+}) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggleRow = useCallback((id: string) => {
@@ -95,7 +101,7 @@ export const LogTable = ({ logs }: { logs: FlatLogRecord[] }) => {
   }, []);
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200">
+    <div className={`overflow-x-auto${bordered ? " rounded-lg border border-gray-200" : ""}`}>
       <table className="min-w-full divide-y divide-gray-200 text-sm">
         <thead className="bg-gray-50">
           <tr>

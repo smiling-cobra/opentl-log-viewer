@@ -26,3 +26,10 @@ export interface HistogramBucket {
   date: string;  // YYYY-MM-DD
   count: number;
 }
+
+export interface ServiceGroup {
+  serviceName: string;
+  serviceNamespace: string;
+  serviceVersion: string;
+  logs: FlatLogRecord[];
+}
