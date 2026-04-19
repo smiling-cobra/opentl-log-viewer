@@ -42,8 +42,3 @@ next-env.d.ts
 
 #ide
 .vscode/
-
-# docs
-CLAUDE.md
-AGENTS.md
-README.md
